@@ -1,0 +1,81 @@
+clear;
+close all;
+clc;
+
+% World coordinate frame = Same as Matlab
+W = SE2();
+
+% Creacion de puntos, antes dados
+LH = [4,6]';  % Left Handle (P2)
+RH = [12,6];  % Right Handle (P1)
+DS = [6,7];   % Driver Seat (P3)
+CS = [10,7];  % Copilot Seat (P4)
+RV = [12,9];  % Rear View Mirror (P5)
+G = [12,3]';  % Gas Tank (P6)
+
+% Plot coordinate frames and points
+figure;
+trplot2(W, 'frame', 'W', 'color', 'r');
+grid on;
+hold on;
+
+% Plot points
+plot_point(RH, '*'); text(RH(1), RH(2), 'RH', 'FontSize', 10, 'Color', 'k');
+plot_point(LH, '*'); text(LH(1), LH(2), 'LH', 'FontSize', 10, 'Color', 'k');
+plot_point(DS, '*'); text(DS(1), DS(2), 'DS', 'FontSize', 10, 'Color', 'k');
+plot_point(CS, '*'); text(CS(1), CS(2), 'CS', 'FontSize', 10, 'Color', 'k');
+plot_point(RV, '*'); text(RV(1), RV(2), 'RV', 'FontSize', 10, 'Color', 'k');
+plot_point(G, '*'); text(G(1), G(2), 'G', 'FontSize', 10, 'Color', 'k');
+
+% 1) Transform points to C reference frame
+WTC = SE2(8,2,0,'deg');
+CTW = inv(WTC);
+%%
+% PUNTOS RESPECTO A C
+cRH = CTW * RH
+cLH = CTW * LH
+cDS = CTW * DS
+cCS = CTW * CS
+cRV = CTW * RV
+cG  = CTW * G
+
+% Plot in C reference frame
+figure;
+trplot2(W, 'frame', 'W', 'color', 'g');
+grid on;
+hold on;
+trplot2(WTC, 'frame', 'C', 'color', 'g');
+
+% Plot points
+plot_point(RH, '*'); text(RH(1), RH(2), 'RH', 'FontSize', 10, 'Color', 'k');
+plot_point(LH, '*'); text(LH(1), LH(2), 'LH', 'FontSize', 10, 'Color', 'k');
+plot_point(DS, '*'); text(DS(1), DS(2), 'DS', 'FontSize', 10, 'Color', 'k');
+plot_point(CS, '*'); text(CS(1), CS(2), 'CS', 'FontSize', 10, 'Color', 'k');
+plot_point(RV, '*'); text(RV(1), RV(2), 'RV', 'FontSize', 10, 'Color', 'k');
+plot_point(G, '*'); text(G(1), G(2), 'G', 'FontSize', 10, 'Color', 'k');
+
+WTC = SE2(11,5,45,'deg'); % Move C to (11,5) with -45° rotation
+
+%%
+% PUNTOS RESPECTO A W
+wRH = WTC * cRH
+wLH = WTC * cLH
+wDS = WTC * cDS
+wCS = WTC * cCS
+wRV = WTC * cRV
+wG = WTC * cG
+
+% Plot final transformation
+figure;
+trplot2(W, 'frame', 'W', 'color', 'b');
+grid on;
+hold on;
+trplot2(WTC, 'frame', 'C', 'color', 'b');
+
+% Plot points
+plot_point(RH, '*'); text(RH(1), RH(2), 'RH', 'FontSize', 10, 'Color', 'k');
+plot_point(LH, '*'); text(LH(1), LH(2), 'LH', 'FontSize', 10, 'Color', 'k');
+plot_point(DS, '*'); text(DS(1), DS(2), 'DS', 'FontSize', 10, 'Color', 'k');
+plot_point(CS, '*'); text(CS(1), CS(2), 'CS', 'FontSize', 10, 'Color', 'k');
+plot_point(RV, '*'); text(RV(1), RV(2), 'RV', 'FontSize', 10, 'Color', 'k');
+plot_point(G, '*'); text(G(1), G(2), 'G', 'FontSize', 10, 'Color', 'k');
