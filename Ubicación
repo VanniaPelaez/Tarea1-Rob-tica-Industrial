@@ -1,0 +1,48 @@
+%Eje mundo W
+close all
+W=SE2 (0,0,0,'deg')
+C=SE2 (8,2,0,'deg')
+%Puntos
+M1=[4,6]'
+M2=[12,6]'
+AC=[6,7]'
+ACOP=[10,7]'
+RD=[12,9]'
+TG=[12,3]'
+figure ('Name','Ejercicio 1.1','NumberTitle','off');
+trplot2(W,'frame','W','arrow')
+hold on
+trplot2(C,'frame','C','arrow')
+plot_point(M1,'*')
+plot_point(M2,'*')
+plot_point(AC,'*')
+plot_point(ACOP,'*')
+plot_point(RD,'*')
+plot_point(TG,'*')
+axis([-1 13 -1 10])
+grid on
+%%inciso 2
+%puntos con respecto a eje C
+CM1=[-4,4]'
+CM2=[4,4]'
+CAC=[-2,5]'
+CACOP=[2,5]'
+CRD=[4,7]'
+CTG=[4,1]'
+%PUNTOS HOMOGENEOS
+CMIH=[-4,4,1]'
+CMDH=[4,4,1]'
+CACH=[-2,5,1]'
+CACOPH=[2,5,1]'
+CRDH=[4,7,1]'
+CTGH=[4,1,1]'
+%nueva posicion del eje de referencia C
+WTC=SE2(11,5,45,'deg')
+WTC=WTC.T
+%nueva posicion de los puntos
+WM1H=WTC*CMIH
+WM2H=WTC*CMDH
+WACH=WTC*CACH
+WACOPH=WTC*CACOPH
+WRDH=WTC*CRDH
+WTGH=WTC*CTGH
