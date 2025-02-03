@@ -1,0 +1,63 @@
+clc;
+clear;
+close all;
+
+% Tiempo de simulación
+tf = 10;         % Tiempo de simulación en segundos
+ts = 0.1;        % Tiempo de muestreo en segundos
+t = 0:ts:tf;     % Vector de tiempo
+N = length(t);   % Número de muestras
+
+% Condiciones iniciales
+x1 = zeros(1, N+1);  % Posición en x
+y1 = zeros(1, N+1);  % Posición en y
+
+x1(1) = 8;          % Posición inicial en x
+y1(1) = 2;          % Posición inicial en y
+
+% Punto final
+x_final = 11;
+y_final = 5;
+
+% Cálculo de velocidades
+dx = (x_final - x1(1)) / tf;
+dy = (y_final - y1(1)) / tf;
+
+u_x = dx * ones(1, N); % Velocidad en x constante
+u_y = dy * ones(1, N); % Velocidad en y constante
+
+% Bucle de simulación
+for k = 1:N
+    x1(k+1) = x1(k) + u_x(k) * ts;
+    y1(k+1) = y1(k) + u_y(k) * ts;
+end
+
+% Simulación virtual 3D
+scene = figure;
+set(scene, 'Color', 'white');
+set(gca, 'FontWeight', 'bold');
+sizeScreen = get(0, 'ScreenSize');
+set(scene, 'position', sizeScreen);
+camlight('headlight');
+axis equal;
+grid on;
+box on;
+xlabel('x(m)'); ylabel('y(m)'); zlabel('z(m)');
+view([35 35]);
+axis([5 15 0 10 0 2]);
+
+% Inicialización del robot
+scale = 4;
+MobileRobot;
+H1 = MobilePlot(x1(1), y1(1), 0, scale);
+hold on;
+H2 = plot3(x1(1), y1(1), 0, 'LineWidth', 2);
+
+% Animación del movimiento
+for k = 1:N
+    delete(H1);
+    delete(H2);
+    H1 = MobilePlot(x1(k), y1(k), 0, scale);
+    H2 = plot3(x1(1:k), y1(1:k), zeros(1, k), 'r', 'LineWidth', 2);
+    pause(ts);
+end
